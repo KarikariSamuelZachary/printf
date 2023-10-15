@@ -1,49 +1,64 @@
-#include "main.h"
+#include <stdarg.h>
+#include <unistd.h>
 
 /**
- * _printf - outputs string to the stdout
- * fs_funcs - stores the functions which print the different data types
- * @format: string to be printed
- * Return: passed string
+ * _printf - Custom printf function
+ * @format: The format string
+ * Return: The number of characters printed (excluding the null byte)
  */
 int _printf(const char *format, ...)
 {
-	fs_func fs_funcs[] = {
-		{'c', parse_char}, {'i', parse_int}, {'d', parse_int},
-		{'u', parse_uint}, {'o', parse_oct}, {'x', parse_hex},
-		{'X', parse_heX}, {'s', parse_str}, {'%', parse_perc},
-		{'\0', NULL}
-	};
-	int i, n_chars_printed = 0;
-	va_list arg;
+    va_list args;
+    int count = 0;
 
-	va_start(arg, format);
-	while (*format)
-	{
-		if (*format == '%')
-		{
-			format++; /* Move to format string representation */
-			/* Search through structs repping each format string representation */
-			for (i = 0; fs_funcs[i].fs != '\0'; i++)
-			{
-				/* If represenation struct found, call the function in that struct */
-				if (*format == fs_funcs[i].fs)
-				{
-					n_chars_printed = fs_funcs[i].func(arg, n_chars_printed);
-				break;
-				}
-			}
-		}
-		else
-		{
-			write(1, format, 1);
-			n_chars_printed++;
-		}
-		format++;
-	}
-	if (!format)
-		return (-1);
-	va_end(arg);
-	return (n_chars_printed);
+    va_start(args, format);
+
+    while (format && *format)
+    {
+        if (*format != '%')
+        {
+            write(1, format, 1); /*Print non-% characters directly*/
+            count++;
+        }
+        else
+        {
+            format++; /*Move past '%'*/
+
+            /*Handle the conversion specifiers*/
+            switch (*format)
+            {
+                case 'c':
+                    count++;
+                    char c = va_arg(args, int);
+                    write(1, &c, 1);
+                    break;
+                case 's':
+                    {
+                        char *str = va_arg(args, char *);
+                        if (str == NULL)
+                            str = "(null)";
+                        while (*str)
+                        {
+                            write(1, str, 1);
+                            str++;
+                            count++;
+                        }
+                    }
+                    break;
+                case '%':
+                    write(1, "%", 1);
+                    count++;
+                    break;
+                default:
+                    write(1, "%", 1);
+                    write(1, format, 1);
+                    count += 2;
+                    break;
+            }
+        }
+        format++;
+    }
+
+    va_end(args);
+    return count;
 }
-

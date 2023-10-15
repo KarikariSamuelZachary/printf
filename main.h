@@ -9,8 +9,5 @@
 
 int _putchar(char c);
 int _printf(const char *format, ...);
-int print_val(int n, int n_chars_printed, int base);
-int print_uint(unsigned int n, int n_chars_printed);
-int print_hex(long n, int n_chars_printed, int cap);
 
 #endif
