@@ -1,64 +1,47 @@
-#include <stdarg.h>
-#include <unistd.h>
+#include "main.h"
+#include <limits.h>
+#include <stdio.h>
 
 /**
- * _printf - Custom printf function
- * @format: The format string
- * Return: The number of characters printed (excluding the null byte)
+ * _printf - displays output of statement
+ * @format: format string with the characters
+ * Return: length of output string
  */
 int _printf(const char *format, ...)
 {
-    va_list args;
-    int count = 0;
+	int (*print_func)(va_list, flags_t *);
+	const char *format_ptr;
+	va_list args;
+	flags_t flags = {0, 0, 0};
 
-    va_start(args, format);
+	register int count = 0;
 
-    while (format && *format)
-    {
-        if (*format != '%')
-        {
-            write(1, format, 1); /*Print non-% characters directly*/
-            count++;
-        }
-        else
-        {
-            format++; /*Move past '%'*/
-
-            /*Handle the conversion specifiers*/
-            switch (*format)
-            {
-                case 'c':
-                    count++;
-                    char c = va_arg(args, int);
-                    write(1, &c, 1);
-                    break;
-                case 's':
-                    {
-                        char *str = va_arg(args, char *);
-                        if (str == NULL)
-                            str = "(null)";
-                        while (*str)
-                        {
-                            write(1, str, 1);
-                            str++;
-                            count++;
-                        }
-                    }
-                    break;
-                case '%':
-                    write(1, "%", 1);
-                    count++;
-                    break;
-                default:
-                    write(1, "%", 1);
-                    write(1, format, 1);
-                    count += 2;
-                    break;
-            }
-        }
-        format++;
-    }
-
-    va_end(args);
-    return count;
+	va_start(args, format);
+	if (!format || (format[0] == '%' && !format[1]))
+		return (-1);
+	if (format[0] == '%' && format[1] == ' ' && !format[2])
+		return (-1);
+	for (format_ptr = format; *format_ptr; format_ptr++)
+	{
+		if (*format_ptr == '%')
+		{
+			format_ptr++;
+			if (*format_ptr == '%')
+			{
+				count += _putchar('%');
+				continue;
+			}
+			while (get_flag(*format_ptr, &flags))
+				format_ptr++;
+			print_func = get_print(*format_ptr);
+			count += (print_func)
+						 ? print_func(args, &flags)
+						 : printf("%%%c", *format_ptr);
+		}
+		else
+			count += _putchar(*format_ptr);
+	}
+	_putchar(-1);
+	va_end(args);
+	return (count);
 }
