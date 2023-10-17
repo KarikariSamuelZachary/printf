@@ -4,7 +4,7 @@
  * @val: value to be converted
  * REturn: counter
  */
-int print_Hex(unsigned int num)
+int print_Hex_extra(unsigned int num)
 {
         int i, counter = 0;
         int *array;
