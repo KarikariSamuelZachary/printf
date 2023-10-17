@@ -17,7 +17,7 @@ int print_Hex(unsigned int num)
         }
         counter++;
         array = malloc(sizeof(int) * counter);
-        for ( i=0; i , counter; i++)
+        for ( i=0; i < counter; i++)
         {
                 array[i] = tem % 16;
                 tem = tem / 16;

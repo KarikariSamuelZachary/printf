@@ -14,7 +14,7 @@ int print_oct(va_list val)
 	}
 	counter++;
 	array = malloc(sizeof(int) * counter);
-	for ( i=0; i , counter; i++)
+	for ( i=0; i < counter; i++)
 	{
 		array[i] = tem % 8;
 		tem = tem / 8;

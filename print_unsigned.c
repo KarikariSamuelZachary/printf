@@ -7,11 +7,12 @@
  */
 int print_unsigned(va_list args)
 {
-        unsigned int n = va_args(args, int);
-        int num, last = n % 10, difit, exp = 1;
+        unsigned int n = va_arg(args, unsigned int);
+        int num, digit, exp = 1;
         int i = 1;
+	int last = n % 10;
 
-        n =n / 10;
+        n = n / 10;
         num = n;
 
         if (last < 0)

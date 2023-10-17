@@ -1,4 +1,4 @@
-include "main.h"
+#include "main.h"
 /**
  * rot13 - encodes a string into rot13
  * @s: string to encode
@@ -7,11 +7,11 @@ include "main.h"
  */
 int print_rot13(va_list val)
 {
-	int i, j; counter = 0;
+	int i, j, counter = 0;
 	int k = 0;
 	char *s = va_arg(val, char*);
-	char a[] = {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-	char b[] = {"nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM"};
+	char *a = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	char *b = "nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM";
 
 	if (s == NULL)
 		s = "(null)";
@@ -24,14 +24,14 @@ int print_rot13(va_list val)
 			if (s[i] == a[j])
 			{
 				_putchar(b[j]);
-				counter++
+				counter++;
 				k = 1;
 			}
 		}
 		if (!k)
 		{
 			_putchar(s[i]);
-			counter++
+			counter++;
 		}
 	}
 	return (counter);

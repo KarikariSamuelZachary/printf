@@ -23,9 +23,9 @@ int _printf(const char *format, ...)
 		return (-1);
 Here:
 
-	while (format[i] ='\0')
+	while (format[i] !='\0')
 	{
-		j = 13;
+		int j = 13;
 		while (j >= 0)
 		{
 			if (m[j].id[0] == format[i] && m[j].id[i] == format[i + 1])
