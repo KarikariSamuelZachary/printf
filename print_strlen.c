@@ -6,7 +6,7 @@
  * Return: string pointer
  */
 
-int strlen(char *str)
+int _strlen(char *str)
 {
 	int i;
 	for (i = 0; str[i] != 0; i++)
